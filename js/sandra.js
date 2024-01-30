@@ -32,14 +32,6 @@ function mostrarDetalles(pokemonId) {
             var statsElement = document.createElement('p');
             statsElement.textContent = `Estadísticas: ${pokemon.stats.map(stat => `${stat.stat.name}: ${stat.base_stat}`).join(', ')}`;
 
-            var boton = document.createElement('button');
-            boton.textContent = 'Volver';
-
-            boton.addEventListener('click', () => {
-                // Redirigir a la página principal
-                window.location.href = 'index.html';
-            });
-
             var vacio = document.createElement('div');
 
             var imageElement = document.createElement('img');
@@ -73,7 +65,6 @@ function mostrarDetalles(pokemonId) {
 
             // Agregar elementos al contenedor
             pokemonContainer.appendChild(nameElement);
-            pokemonContainer.appendChild(boton);
             pokemonContainer.appendChild(weightElement);
             pokemonContainer.appendChild(heightElement);
             pokemonContainer.appendChild(formsElement);
@@ -82,8 +73,6 @@ function mostrarDetalles(pokemonId) {
             pokemonContainer.appendChild(abilitiesElement);
             pokemonContainer.appendChild(statsElement);
                // Agregar enlaces de navegación
-            agregarEnlaceNavegacion(pokemonContainer, pokemonId, 'Anterior');
-            agregarEnlaceNavegacion(pokemonContainer, pokemonId, 'Siguiente');
             pokemonContainer.appendChild(vacio);
             pokemonContainer.appendChild(imageElement);
             pokemonContainer.appendChild(galleryElement);
