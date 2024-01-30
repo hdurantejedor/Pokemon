@@ -1,0 +1,72 @@
+* {
+    padding: 0;
+    margin : 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+.header button {
+    background-color: #a5aeb7;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .header button:hover {
+    background-color: #ffffff;
+  }
+  
+
+body{
+    height: 100vh;
+    background: linear-gradient(
+        #da2e2c 49%,
+        #090029 49%,
+        #090029 51%,
+        #ffffff 51%
+        );
+}
+
+
+.score-container {
+ position: fixed;
+ transform: translate(-50%, -50%);
+ left: 50%;
+ top: 50%;
+}
+
+#start {
+    background-color: #ffffff;
+    height: 6em;
+    width: 6em;
+    font-size: 1.8em;
+    border : 0.4em solid #090029;
+    border-radius: 50%;
+    cursor: pointer
+}
+
+/* Estilos para la ventana modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .modal-content {
+    margin: 15% auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    max-width: 80%;
+    text-align: center;
+  }
+  

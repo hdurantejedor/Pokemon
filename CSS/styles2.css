@@ -1,0 +1,78 @@
+/* styles2.css */
+
+/* Estilos para el contenedor principal */
+#pokemon-details {
+    max-width: 650px;
+    margin: 30px auto 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center; /* Alineación central del contenido */
+}
+
+/* Estilos para el nombre del Pokémon */
+#pokemon-details h1 {
+    color: #e44d26; /* Color naranja, puedes cambiarlo */
+    font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilos para los detalles del Pokémon */
+#pokemon-details p {
+    margin: 10px 0;
+    font-weight: bold; /* Texto en negrita */
+}
+
+/* Estilos para la imagen del Pokémon */
+#pokemon-details img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* Estilos para la galería de imágenes */
+.pokemon-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.pokemon-gallery img {
+    width: 48%;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+/* Estilos para los enlaces de navegación (Anterior y Siguiente) */
+#pokemon-details a {
+    text-decoration: none;
+    color: #3498db; /* Color azul, puedes cambiarlo */
+    margin: 0 10px;
+    font-weight: bold; /* Texto en negrita */
+    box-shadow: 2cm;
+}
+
+#pokemon-details a:hover {
+    color: #2980b9; /* Cambia el color al pasar el mouse */
+}
+
+
+/* Estilos para el botón "Volver" */
+#pokemon-details button {
+    background-color: #3498db; /* Color azul, puedes cambiarlo */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    display: block;
+    margin-bottom: 10px; /* Agregar margen inferior para separación */
+
+}
+
+#pokemon-details button:hover {
+    background-color: #2980b9; /* Cambia el color al pasar el mouse */
+
+}
