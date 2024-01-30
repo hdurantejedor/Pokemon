@@ -1,0 +1,30 @@
+
+body {
+    margin: 0;
+    overflow: hidden; /* Ocultar barras de desplazamiento */
+}
+
+#portada {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    font-family: 'Arial', sans-serif;
+}
+
+#logo-pokemon {
+    width: 150px; /* Ajusta el tamaño del logotipo según sea necesario */
+    margin-bottom: 20px;
+}
+
+#mensaje {
+    font-size: 24px;
+    color: #333;
+}
