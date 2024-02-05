@@ -84,5 +84,5 @@ function mostrarDetalles(pokemonId) {
             document.body.appendChild(pokemonContainer);
         })
         .catch(error => manejarError(error.message));
+        
 }
-<script src="../js/nicolas.js"></script>
