@@ -3,8 +3,13 @@ body {
     font-family: 'Arial', sans-serif;
 }
 
+.Pokemon {
+    margin-left: 145px;
+ 
+  }
 .container {
     margin-top: 20px;
+
 }
 
 .pokemon-container {
@@ -39,9 +44,11 @@ header {
     border: #0056b3 2px solid;
     border-radius: 5px;
     text-align: center;
-    height: 180px; /* Altura fija */
+    height: 180px;
+    /* Altura fija */
     width: 150px;
-    flex: 0 0 19%; /* Ajuste para 5 cajas en una fila */
+    flex: 0 0 19%;
+    /* Ajuste para 5 cajas en una fila */
 }
 
 .pokemon-box img {
@@ -71,3 +78,141 @@ header {
 .nav-link:hover {
     color: #0056b3;
 }
+
+
+#filtro {
+    display: flex;
+    flex-direction: column;
+    /* Cambia la dirección del flexbox a columna */
+    align-items: flex-start;
+    /* Alinea los elementos al principio */
+    background-color: #808080;
+    padding: 10px;
+    gap: 10px;
+}
+
+#filtro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /* Centro horizontalmente */
+    align-items: center;
+    /* Centro verticalmente */
+    background-color: #808080;
+    padding: 10px;
+    gap: 10px;
+}
+
+#filtro .btn-group {
+    display: flex;
+    justify-content: flex-start;
+    /* Alineado a la izquierda horizontalmente */
+    gap: 10px;
+}
+
+#filtro .btn {
+    flex: 0 0 calc(12% - 12px);
+    /* Ancho del 10% con espacio entre los botones */
+    margin-bottom: 10px;
+    text-align: center;
+    width: 120px;
+    /* Ajusta el ancho de los botones */
+    height: 40px;
+    /* Ajusta el alto de los botones */
+    font-size: 15px;
+    /* Ajusta el tamaño de la fuente */
+    border-radius: 5px;
+    color: #fff;
+    font-family: "Flexo-Medium", arial, sans-serif;
+}
+
+#filtro .btn.tipo-bicho {
+    background-color: #729f3f;
+}
+
+/* Bicho */
+#filtro .btn.tipo-dragón {
+    background: #c44fd3
+}
+
+/* Dragón */
+#filtro .btn.tipo-hada {
+    background-color: #fdb9e9;
+}
+
+/* Hada */
+#filtro .btn.tipo-fuego {
+    background-color: #fd7d24;
+}
+
+/* Fuego */
+#filtro .btn.tipo-fantasma {
+    background-color: #7b62a3;
+}
+
+/* Fantasma */
+#filtro .btn.tipo-tierra {
+    background: #ab9842;
+}
+
+/* Tierra */
+#filtro .btn.tipo-normal {
+    background-color: #cdd1d2;
+}
+
+/* Normal */
+#filtro .btn.tipo-psíquico {
+    background-color: #f366b9;
+}
+
+/* Psíquico */
+#filtro .btn.tipo-acero {
+    background-color: #90a0a0;
+}
+
+/* Acero */
+#filtro .btn.tipo-siniestro {
+    background-color: #707070;
+}
+
+/* Siniestro */
+#filtro .btn.tipo-eléctrico {
+    background-color: #f0d72f;
+}
+
+/* Eléctrico */
+#filtro .btn.tipo-lucha {
+    background-color: #d56723;
+}
+
+/* Lucha */
+#filtro .btn.tipo-volador {
+    background: #3dc7ef
+}
+
+/* Volador */
+#filtro .btn.tipo-planta {
+    background-color: #9bcc50;
+}
+
+/* Planta */
+#filtro .btn.tipo-hielo {
+    background-color: #51c4e7;
+}
+
+/* Hielo */
+#filtro .btn.tipo-veneno {
+    background-color: #b97fc9;
+}
+
+/* Veneno */
+#filtro .btn.tipo-roca {
+    background-color: #766418;
+}
+
+/* Roca */
+#filtro .btn.tipo-agua {
+    background-color: #4592c4;
+}
+
+/* Agua */
