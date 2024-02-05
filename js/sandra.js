@@ -85,3 +85,4 @@ function mostrarDetalles(pokemonId) {
         })
         .catch(error => manejarError(error.message));
 }
+<script src="../js/nicolas.js"></script>
