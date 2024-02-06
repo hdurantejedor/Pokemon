@@ -44,6 +44,17 @@
         </div>
     </div>
 
+     <!-- Se agregó el evento onclick al botón -->
+     <div class="dropdown">
+        <button class="dropbtn" onclick="toggleDropdown()">Ordenar por</button>
+        <div class="dropdown-content">
+            <a href="#" onclick="sort('lowerNumber')">Número inferior</a>
+            <a href="#" onclick="sort('higherNumber')">Número superior</a>
+            <a href="#" onclick="sort('aToZ')">A-Z</a>
+            <a href="#" onclick="sort('zToA')">Z-A</a>
+        </div>
+    </div>
+
     <div class="container mt-5">
         <div class = "Pokemon">
         <div class="row" id="capa"></div>
@@ -52,9 +63,7 @@
         </nav>
         </div>
     </div>
-    <!-- Parte 2: Detalles de Pokémon y funcionalidades adicionales -->
 
-    <!-- El contenido de esta parte se mostrará dinámicamente mediante JavaScript -->
 
     <!-- Script para la parte 1 -->
     <script src="../js/hugo.js"></script>
