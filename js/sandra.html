@@ -1,3 +1,15 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Botón</title>
+</head>
+<body>
+
+    <script src="nicolas.js"></script>
+
+</body>
+<script>
 // Función para mostrar detalles de un Pokémon
 function mostrarDetalles(pokemonId) {
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
@@ -11,12 +23,11 @@ function mostrarDetalles(pokemonId) {
             // Limpiar el contenido actual
             document.body.innerHTML = '';
 
+            crearBoton();
+
             // Crear un contenedor para mostrar los detalles del Pokémon
             var pokemonContainer = document.createElement('div');
             pokemonContainer.id = 'pokemon-details';
-
-            var botonVolver= document.createElement('button');
-            botonVolver.id='boton';
 
             // Crear elementos HTML para cada detalle del Pokémon
             var nameElement = document.createElement('h1');
@@ -75,7 +86,7 @@ function mostrarDetalles(pokemonId) {
             pokemonContainer.appendChild(typesElement);
             pokemonContainer.appendChild(abilitiesElement);
             pokemonContainer.appendChild(statsElement);
-               // Agregar enlaces de navegación
+            // Agregar enlaces de navegación
             pokemonContainer.appendChild(vacio);
             pokemonContainer.appendChild(imageElement);
             pokemonContainer.appendChild(galleryElement);
@@ -87,5 +98,9 @@ function mostrarDetalles(pokemonId) {
             document.body.appendChild(pokemonContainer);
         })
         .catch(error => manejarError(error.message));
-        
+
+
+
 }
+</script>
+</html>
