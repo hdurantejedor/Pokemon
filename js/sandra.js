@@ -1,3 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon App</title>
+    <!-- Enlace a Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Hoja de estilo para la parte 1 -->
+    <link rel="stylesheet" href="../CSS/styles.css">
+
+    <!-- Hoja de estilo para la parte 2 -->
+    <link rel="stylesheet" href="../CSS/styles2.css">
+</head>
+
+<header>
+<!-- Parte 0: Encabezado y barra de navegación -->
+<div id="logo" class="navbar navbar-expand-lg navbar-light bg-light justify-content-start">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="../Pokemon/portada.html">
+            <img src="../img/logopokemon.png" alt="Logo de Pokemon">
+        </a>
+    </div>
+</div>
+<div id="guess" class="navbar navbar-expand-lg navbar-light bg-light justify-content-end">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="../Pokemon/Guess.html">
+            <img src="../img/Guess.png" alt="Logo de Pokemon">
+        </a>
+    </div>
+</div>
+</header>
+
+<body>
+
+    <button onclick="agregarEnlaceNavegacion"> boton</button>
+</body>
+<script>
 // Función para mostrar detalles de un Pokémon
 function mostrarDetalles(pokemonId) {
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
@@ -86,3 +127,5 @@ function mostrarDetalles(pokemonId) {
         .catch(error => manejarError(error.message));
         
 }
+</script>
+</html>
