@@ -12,8 +12,6 @@ function mostrarDetalles(pokemonId) {
             // Limpiar el contenido actual
             document.body.innerHTML = '';
 
-            crearBoton();
-
             // Crear un contenedor para mostrar los detalles del Pokémon
             var pokemonContainer = document.createElement('div');
             pokemonContainer.id = 'pokemon-details';
