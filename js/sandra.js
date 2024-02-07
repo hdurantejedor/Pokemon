@@ -15,6 +15,9 @@ function mostrarDetalles(pokemonId) {
             var pokemonContainer = document.createElement('div');
             pokemonContainer.id = 'pokemon-details';
 
+            var botonVolver= document.createElement('button');
+            botonVolver.id='boton';
+
             // Crear elementos HTML para cada detalle del Pokémon
             var nameElement = document.createElement('h1');
             nameElement.textContent = pokemon.name;
