@@ -1,15 +1,4 @@
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Botón</title>
-</head>
-<body>
 
-    <script src="nicolas.js"></script>
-
-</body>
-<script>
 // Función para mostrar detalles de un Pokémon
 function mostrarDetalles(pokemonId) {
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
@@ -102,5 +91,3 @@ function mostrarDetalles(pokemonId) {
 
 
 }
-</script>
-</html>
