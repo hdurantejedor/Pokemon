@@ -1,4 +1,4 @@
-function agregarEnlaceNavegacion(container, pokemonId, direccion) {
+function botonVolver(container, pokemonId, direccion) {
     var enlaceNavegacion = document.createElement('a');
     enlaceNavegacion.textContent = direccion;
     enlaceNavegacion.href = '#';
