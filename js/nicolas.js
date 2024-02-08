@@ -1,5 +1,9 @@
 function crearBotonVolver() {
     var boton = document.createElement('button');
+    boton.innerHTML = "Mi Botón";
+boton.id = "mi-boton";
+// Agregar el botón al documento
+document.body.appendChild(boton);
     boton.textContent = 'Volver';
     boton.addEventListener("click", function () {
         window.location.href = "index.html";
