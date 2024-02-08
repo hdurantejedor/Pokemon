@@ -16,6 +16,8 @@
                 var pokemonContainer = document.createElement('div');
                 pokemonContainer.id = 'pokemon-details';
 
+                crearBotonVolver();
+                
                 // Crear elementos HTML para cada detalle del Pokémon
                 var nameElement = document.createElement('h1');
                 nameElement.textContent = pokemon.name;
@@ -81,7 +83,7 @@
                 document.body.appendChild(pokemonContainer);
 
                 // Después de mostrar los detalles, llamar a la función para crear el botón "Volver"
-                crearBotonVolver();
+                
                 crearBotonesNavegacion(pokemonContainer, pokemonId);
             })
             .catch(error => manejarError(error.message));
