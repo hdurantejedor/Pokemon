@@ -4,7 +4,6 @@ var pokemonesPorPagina = 20;
 var filtroActual = null;
 var pokemonList = [];
 
-
 const tiposEnIngles = {
     'Fuego': 'fire',
     'Agua': 'water',
@@ -26,13 +25,75 @@ const tiposEnIngles = {
     'Dragón': 'dragon'
 };
 
+function cargarTodosLosPokemons() {
+    return new Promise((resolve, reject) => {
+        const limite = pokemonesPorPagina; // Define cuántos Pokémon quieres cargar.
+        const url = `https://pokeapi.co/api/v2/pokemon?limit=${limite}`;
 
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                let promesas = data.results.map(pokemon => fetch(pokemon.url).then(response => response.json()));
+                Promise.all(promesas)
+                    .then(resultados => {
+                        pokemonList = resultados;
+                        resolve(resultados); // Resuelve con los resultados obtenidos.
+                    })
+                    .catch(error => reject(error));
+            })
+            .catch(error => reject(error));
+    });
+}
+
+
+function mostrarPokemonsOrdenados() {
+    const contenedor = document.getElementById("capa");
+    contenedor.innerHTML = ''; // Limpia el contenedor
+    pokemonList.forEach(pokemon => {
+        const contenedorPokemon = document.createElement("div");
+        contenedorPokemon.className = "pokemon-box";
+        contenedorPokemon.innerHTML = `
+            <p><span style="cursor: pointer; text-decoration: underline;">${pokemon.name} (#${pokemon.id})</span></p>
+            <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+        `;
+        contenedor.appendChild(contenedorPokemon);
+    });
+}
+
+function sort(criterio) {
+    if (pokemonList.length === 0) {
+        cargarTodosLosPokemons().then(() => {
+            aplicarOrdenamiento(criterio);
+        });
+    } else {
+        aplicarOrdenamiento(criterio);
+    }
+}
+
+function aplicarOrdenamiento(criterio) {
+    switch (criterio) {
+        case 'lowerNumber':
+            pokemonList.sort((a, b) => a.id - b.id);
+            break;
+        case 'higherNumber':
+            pokemonList.sort((a, b) => b.id - a.id);
+            break;
+        // Implementa otros criterios aquí
+    }
+    mostrarPokemonsOrdenados(); // Actualiza la UI con la lista ordenada
+}
 
 function filtrarPorTipo(tipo) {
     filtroActual = tipo; // Establece el filtro actual
     realizarSolicitud(paginaActual); // Carga la página actual con el filtro aplicado
 }
 
+
+
+window.onload = function() {
+    cargarTodosLosPokemons().then(mostrarPokemonsOrdenados);
+    botonesTipos();
+};
 
 
 
@@ -86,47 +147,6 @@ window.onclick = function (event) {
         }
     }
 }
-function cargarPokemons() {
-    fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`)// Ajusta el límite según sea necesario
-        .then(response => response.json())
-        .then(data => {
-            pokemonList = data.results; // Asegúrate de que esto se ajuste a tus necesidades
-            mostrarPokemons(); // Muestra los Pokémon recién cargados
-        })
-        .catch(error => manejarError(error.message));
-}
-
-function sort(criterio) {
-    // Asumiendo que pokemonList ya está lleno
-    switch (criterio) {
-        case 'lowerNumber':
-            // Ordenamiento por ID más bajo a más alto
-            pokemonList.sort((a, b) => parseInt(a.url.split('/')[6]) - parseInt(b.url.split('/')[6]));
-            break;
-        case 'higherNumber':
-            // Ordenamiento por ID más alto a más bajo
-            pokemonList.sort((a, b) => parseInt(b.url.split('/')[6]) - parseInt(a.url.split('/')[6]));
-            break;
-        // Agregar más casos según sea necesario
-    }
-    mostrarPokemonsOrdenados(); // Actualiza la UI con la lista ordenada
-}
-
-function mostrarPokemonsOrdenados() {
-    const contenedor = document.getElementById("capa");
-    contenedor.innerHTML = ''; // Limpia el contenedor
-
-    pokemonList.forEach(pokemon => {
-        fetch(pokemon.url)
-            .then(response => response.json())
-            .then(pokemonData => {
-                // Suponiendo que procesarPokemon actualiza la UI
-                procesarPokemon(pokemonData);
-            })
-            .catch(error => manejarError(error.message));
-    });
-}
-
 
 
 
