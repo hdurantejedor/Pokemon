@@ -27,30 +27,12 @@ const tiposEnIngles = {
 };
 
 
+
 function filtrarPorTipo(tipo) {
-    filtroActual = tipo;
-    var tipoEnIngles = tiposEnIngles[tipo];
-    document.getElementById("capa").innerHTML = "";
-
-
-
-
-    fetch(`https://pokeapi.co/api/v2/type/${tipoEnIngles}`)
-        .then(response => response.json())
-        .then(data => {
-            let pokemonPorTipo = data.pokemon.map(p => p.pokemon);
-            pokemonPorTipo = pokemonPorTipo.slice(0, 20);
-            pokemonPorTipo.forEach(pokemon => {
-                fetch(pokemon.url)
-                    .then(response => response.json())
-                    .then(pokemonData => {
-                        procesarPokemon(pokemonData);
-                    })
-                    .catch(error => manejarError(error.message));
-            });
-        })
-        .catch(error => manejarError(error.message));
+    filtroActual = tipo; // Establece el filtro actual
+    realizarSolicitud(paginaActual); // Carga la página actual con el filtro aplicado
 }
+
 
 
 
