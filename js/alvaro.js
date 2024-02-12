@@ -28,6 +28,7 @@ const tiposEnIngles = {
 
 
 function filtrarPorTipo(tipo) {
+    filtroActual = tipo;
     var tipoEnIngles = tiposEnIngles[tipo];
     document.getElementById("capa").innerHTML = "";
 
