@@ -45,11 +45,17 @@ function cargarTodosLosPokemons() {
     });
 }
 
-
 function mostrarPokemonsOrdenados() {
     const contenedor = document.getElementById("capa");
     contenedor.innerHTML = ''; // Limpia el contenedor
-    pokemonList.forEach(pokemon => {
+
+    // Calcula el inicio y el fin de los Pokémon para la página actual
+    const inicio = (paginaActual - 1) * pokemonesPorPagina;
+    const fin = inicio + pokemonesPorPagina;
+    const pokemonsPagina = pokemonList.slice(inicio, fin);
+
+    // Muestra solo los Pokémon de la página actual
+    pokemonsPagina.forEach(pokemon => {
         const contenedorPokemon = document.createElement("div");
         contenedorPokemon.className = "pokemon-box";
         contenedorPokemon.innerHTML = `
@@ -59,6 +65,7 @@ function mostrarPokemonsOrdenados() {
         contenedor.appendChild(contenedorPokemon);
     });
 }
+
 
 function sort(criterio) {
     if (pokemonList.length === 0) {
@@ -78,15 +85,73 @@ function aplicarOrdenamiento(criterio) {
         case 'higherNumber':
             pokemonList.sort((a, b) => b.id - a.id);
             break;
-        // Implementa otros criterios aquí
+        case 'aToZ':
+            pokemonList.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'zToA':
+            pokemonList.sort((a, b) => b.name.localeCompare(a.name));
+            break;
     }
     mostrarPokemonsOrdenados(); // Actualiza la UI con la lista ordenada
 }
 
+
 function filtrarPorTipo(tipo) {
     filtroActual = tipo; // Establece el filtro actual
-    realizarSolicitud(paginaActual); // Carga la página actual con el filtro aplicado
+    paginaActual = 1; // No reinicia la página actual
+
+    // Asume una función que actualiza pokemonList basada en el filtro
+    // y recalcula totalPaginas según sea necesario
+    realizarSolicitudConFiltro(paginaActual, filtroActual);
 }
+
+function realizarSolicitudConFiltro(pagina, filtro) {
+    document.getElementById("capa").innerHTML = "";
+    var offset = (pagina - 1) * pokemonesPorPagina;
+    let url;
+
+    if (filtro) {
+        url = `https://pokeapi.co/api/v2/type/${tiposEnIngles[filtro]}`;
+    } else {
+        // Si no hay filtro seleccionado, carga la página actual de todos los Pokémon
+        url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
+    }
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            // Ajuste para manejar la carga basada en si hay un filtro de tipo aplicado o no
+            if (filtro) {
+                // Filtra los Pokémon por tipo y ajusta el total de páginas y la página actual según sea necesario
+                let pokemonPorTipo = data.pokemon.map(p => p.pokemon);
+                let totalFiltrados = pokemonPorTipo.length;
+                totalPaginas = Math.ceil(totalFiltrados / pokemonesPorPagina);
+                
+                // Ajusta la página actual si es necesario
+                if (paginaActual > totalPaginas) {
+                    paginaActual = totalPaginas;
+                    offset = (paginaActual - 1) * pokemonesPorPagina;
+                }
+
+                // Ahora carga los Pokémon para la página actual ajustada
+                let promesas = pokemonPorTipo.slice(offset, offset + pokemonesPorPagina).map(pokemon => fetch(pokemon.url).then(response => response.json()));
+                Promise.all(promesas)
+                    .then(resultados => {
+                        pokemonList = resultados;
+                        mostrarPokemonsOrdenados();
+                        actualizarPaginacion();
+                    });
+            } else {
+                // Procesamiento para la carga general sin filtro
+                pokemonList = data.results;
+                mostrarPokemonsOrdenados();
+                actualizarPaginacion();
+            }
+        })
+        .catch(error => console.error("Error al cargar Pokémon: ", error));
+}
+
+
 
 
 
