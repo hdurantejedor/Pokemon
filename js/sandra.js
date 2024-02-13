@@ -1,6 +1,6 @@
 
     // Función para mostrar detalles de un Pokémon
-    import { crearBotonesNavegacion } from './botonesNavegacion.js';
+    import { crearBotonesNavegacion } from './nicolas.js';
 
     export function mostrarDetalles(pokemonId) {
         
