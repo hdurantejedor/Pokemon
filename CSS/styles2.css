@@ -87,10 +87,41 @@ button#mi-boton {
     border-radius: 5px;
     margin-bottom: 30px;
     margin-left: 30px;
-    
     padding: 10px 20px;
     cursor: pointer;
     font-size: larger;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 
+}
+
+button#mi-boton:hover {
+    background-color: #fff;
+    color: #e44d26;
+}
+
+.boton-navegacion {
+    background-color: #e44d26;
+    color: white;
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    margin-left: 30px;
+    padding: 10px 50px;
+    cursor: pointer;
+    font-size: larger;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+  }
+  
+  .boton-navegacion:hover {
+    background-color: #fff;
+    color: #e44d26;
+  }
+  
+  #botones-navegacion {
+    display: flex;
+    justify-content: space-between; /* Esto separa los elementos: uno al inicio y otro al final */
+    padding: 0 30px; /* Asegúrate de tener algo de espacio en los lados si lo necesitas */
+    margin-top: 20px;
 }

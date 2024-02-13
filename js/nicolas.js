@@ -18,7 +18,8 @@ function crearBotonesNavegacion(pokemonId) {
 
     // Crear botón "Anterior"
     var botonAnterior = document.createElement('button');
-    botonAnterior.textContent = 'Anterior';
+    botonAnterior.textContent = '←';
+    botonAnterior.classList.add('boton-navegacion'); // Añadir clase aquí
     botonAnterior.addEventListener("click", function () {
         var pokemonAnteriorId = pokemonId - 1;
         mostrarDetalles(pokemonAnteriorId);
@@ -27,7 +28,8 @@ function crearBotonesNavegacion(pokemonId) {
 
     // Crear botón "Siguiente"
     var botonSiguiente = document.createElement('button');
-    botonSiguiente.textContent = 'Siguiente';
+    botonSiguiente.textContent = '→';
+    botonSiguiente.classList.add('boton-navegacion'); // Añadir clase aquí
     botonSiguiente.addEventListener("click", function () {
         var pokemonSiguienteId = pokemonId + 1;
         mostrarDetalles(pokemonSiguienteId);

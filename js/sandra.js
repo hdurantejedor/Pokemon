@@ -1,6 +1,8 @@
 
     // Función para mostrar detalles de un Pokémon
+
     function mostrarDetalles(pokemonId) {
+        
         fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
             .then(response => {
                 if (!response.ok) {
@@ -87,4 +89,5 @@
                 
             })
             .catch(error => manejarError(error.message));
+
     }
