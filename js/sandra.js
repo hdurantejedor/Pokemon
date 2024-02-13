@@ -1,8 +1,7 @@
 
     // Función para mostrar detalles de un Pokémon
-    import { crearBotonesNavegacion } from './botonesNavegacion.js';
 
-    export function mostrarDetalles(pokemonId) {
+    function mostrarDetalles(pokemonId) {
         
         fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
             .then(response => {
@@ -90,6 +89,5 @@
                 
             })
             .catch(error => manejarError(error.message));
-            window.mostrarDetalles = mostrarDetalles;
 
     }
