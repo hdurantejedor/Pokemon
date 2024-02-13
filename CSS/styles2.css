@@ -109,8 +109,9 @@ button#mi-boton:hover {
     margin-left: 30px;
     padding: 10px 50px;
     cursor: pointer;
-    font-size: larger;
+    font-size: x-large;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    
 
   }
   
