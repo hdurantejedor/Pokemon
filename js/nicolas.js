@@ -13,26 +13,32 @@ document.body.appendChild(boton);
 
 // Función para crear botones de navegación y agregarlos al contenedor especificado
 function crearBotonesNavegacion(pokemonId) {
+    var contenedorExistente = document.getElementById('botones-navegacion');
+    if (contenedorExistente) {
+        document.body.removeChild(contenedorExistente);
+    }
+
     var botonesContainer = document.createElement('div');
     botonesContainer.id = 'botones-navegacion';
 
     // Crear botón "Anterior"
     var botonAnterior = document.createElement('button');
     botonAnterior.textContent = '←';
-    botonAnterior.classList.add('boton-navegacion'); // Añadir clase aquí
+    botonAnterior.classList.add('boton-navegacion');
     botonAnterior.addEventListener("click", function () {
-        var pokemonAnteriorId = pokemonId - 1;
-        mostrarDetalles(pokemonAnteriorId);
+        if(pokemonId > 1) { // Asumiendo que el ID de Pokémon más bajo es 1
+            mostrarDetalles(pokemonId - 1);
+        }
     });
     botonesContainer.appendChild(botonAnterior);
 
     // Crear botón "Siguiente"
     var botonSiguiente = document.createElement('button');
     botonSiguiente.textContent = '→';
-    botonSiguiente.classList.add('boton-navegacion'); // Añadir clase aquí
+    botonSiguiente.classList.add('boton-navegacion');
     botonSiguiente.addEventListener("click", function () {
-        var pokemonSiguienteId = pokemonId + 1;
-        mostrarDetalles(pokemonSiguienteId);
+        // Aquí podrías poner una comprobación para el ID máximo de Pokémon si lo deseas
+        mostrarDetalles(pokemonId + 1);
     });
     botonesContainer.appendChild(botonSiguiente);
 
