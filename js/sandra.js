@@ -1,7 +1,7 @@
 
     // Función para mostrar detalles de un Pokémon
 
-    function mostrarDetalles(pokemonId) {
+   export function mostrarDetalles(pokemonId) {
         
         fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
             .then(response => {
