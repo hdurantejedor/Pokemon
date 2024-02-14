@@ -144,41 +144,5 @@ function actualizarPaginacion() {
     paginacionContainer.appendChild(paginaActualSpan);
 }
 
-function botonesTipos() {
-    var tiposPokemon = [
-        'Fuego', 'Agua', 'Planta', 'Bicho', 'Volador',
-        'Normal', 'Veneno', 'Tierra', 'Hada', 'Eléctrico',
-        'Lucha', 'Hielo', 'Fantasma', 'Acero', 'Roca',
-        'Psíquico', 'Siniestro', 'Dragón'
-    ];
 
-    var filtroContainer = document.getElementById('filtro');
-
-    var filaActual;
-    tiposPokemon.forEach((tipo, index) => {
-        if (index % 9 === 0) {
-            // Comienza una nueva fila después de cada 5 botones
-            filaActual = document.createElement('div');
-            filaActual.className = 'btn-group d-flex justify-content-center align-items-center'; // Agregamos clases de Bootstrap para centrado
-            filtroContainer.appendChild(filaActual);
-        }
-
-        var button = document.createElement('button');
-        button.textContent = tipo;
-        button.className = 'btn btn-primary tipo-' + tipo.toLowerCase(); // Agregamos clases de tipo
-        button.addEventListener('click', function() {
-            // Agrega la lógica necesaria cuando se hace clic en un botón de tipo
-            console.log('Haz clic en el botón de tipo:', tipo);
-        });
-        
-        filaActual.appendChild(button);
-    });
-}
-
-var paginaInicial = 1;
-
-window.onload = function () {
-    cargarPagina(paginaInicial);
-    botonesTipos();  // Llamar a la función para crear y mostrar los botones de tipo
-};
 
