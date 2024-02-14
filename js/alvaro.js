@@ -25,24 +25,24 @@ const tiposEnIngles = {
     'Dragón': 'dragon'
 };
 
+// Corregido para incluir el offset en la URL
 function cargarTodosLosPokemons() {
-    return new Promise((resolve, reject) => {
-        const limite = pokemonesPorPagina; // Define cuántos Pokémon quieres cargar.
-        const url = `https://pokeapi.co/api/v2/pokemon?limit=${limite}`;
+    var offset = (paginaActual - 1) * pokemonesPorPagina;
+    var url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
 
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                let promesas = data.results.map(pokemon => fetch(pokemon.url).then(response => response.json()));
-                Promise.all(promesas)
-                    .then(resultados => {
-                        pokemonList = resultados;
-                        resolve(resultados); // Resuelve con los resultados obtenidos.
-                    })
-                    .catch(error => reject(error));
-            })
-            .catch(error => reject(error));
-    });
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            pokemonList = data.results;
+            totalPaginas = Math.ceil(data.count / pokemonesPorPagina);
+            return Promise.all(pokemonList.map(pokemon => fetch(pokemon.url).then(resp => resp.json())));
+        })
+        .then(pokemons => {
+            pokemonList = pokemons;
+            mostrarPokemonsOrdenados();
+            actualizarPaginacion();
+        })
+        .catch(error => console.error("Error al cargar Pokémon: ", error));
 }
 
 function mostrarPokemonsOrdenados() {
@@ -98,65 +98,48 @@ function aplicarOrdenamiento(criterio) {
 
 function filtrarPorTipo(tipo) {
     filtroActual = tipo; // Establece el filtro actual
-    paginaActual = 1; // No reinicia la página actual
-
-    // Asume una función que actualiza pokemonList basada en el filtro
-    // y recalcula totalPaginas según sea necesario
-    realizarSolicitudConFiltro(paginaActual, filtroActual);
+     // Siempre reinicia a la primera página al aplicar un nuevo filtro
+    cargarPokemonsPorTipo(); // Llama a la función de carga ajustada para el filtrado
 }
 
-function realizarSolicitudConFiltro(pagina, filtro) {
-    document.getElementById("capa").innerHTML = "";
-    var offset = (pagina - 1) * pokemonesPorPagina;
-    let url;
 
-    if (filtro) {
-        url = `https://pokeapi.co/api/v2/type/${tiposEnIngles[filtro]}`;
+
+// Asumiendo que ya tienes definidas las variables iniciales y tiposEnIngles.
+
+function cargarPokemonsPorTipo() {
+    let url;
+    if (filtroActual) {
+        url = `https://pokeapi.co/api/v2/type/${tiposEnIngles[filtroActual]}`;
     } else {
-        // Si no hay filtro seleccionado, carga la página actual de todos los Pokémon
+        let offset = (paginaActual - 1) * pokemonesPorPagina;
         url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
     }
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            // Ajuste para manejar la carga basada en si hay un filtro de tipo aplicado o no
-            if (filtro) {
-                // Filtra los Pokémon por tipo y ajusta el total de páginas y la página actual según sea necesario
-                let pokemonPorTipo = data.pokemon.map(p => p.pokemon);
-                let totalFiltrados = pokemonPorTipo.length;
-                totalPaginas = Math.ceil(totalFiltrados / pokemonesPorPagina);
-                
-                // Ajusta la página actual si es necesario
-                if (paginaActual > totalPaginas) {
-                    paginaActual = totalPaginas;
-                    offset = (paginaActual - 1) * pokemonesPorPagina;
-                }
-
-                // Ahora carga los Pokémon para la página actual ajustada
-                let promesas = pokemonPorTipo.slice(offset, offset + pokemonesPorPagina).map(pokemon => fetch(pokemon.url).then(response => response.json()));
-                Promise.all(promesas)
-                    .then(resultados => {
-                        pokemonList = resultados;
-                        mostrarPokemonsOrdenados();
-                        actualizarPaginacion();
-                    });
-            } else {
-                // Procesamiento para la carga general sin filtro
-                pokemonList = data.results;
-                mostrarPokemonsOrdenados();
-                actualizarPaginacion();
-            }
+            const results = filtroActual ? data.pokemon.map(item => item.pokemon) : data.results;
+            totalPaginas = Math.ceil((filtroActual ? results.length : data.count) / pokemonesPorPagina);
+            const promises = results.slice(0, pokemonesPorPagina).map(pokemon => fetch(pokemon.url).then(resp => resp.json()));
+            return Promise.all(promises);
+        })
+        .then(pokemons => {
+            pokemonList = pokemons;
+            mostrarPokemonsOrdenados();
+            actualizarPaginacion();
         })
         .catch(error => console.error("Error al cargar Pokémon: ", error));
 }
+
+// Revisa la implementación de mostrarPokemonsOrdenados y actualizarPaginacion para asegurar que manejen correctamente los datos y la UI.
+
 
 
 
 
 
 window.onload = function() {
-    cargarTodosLosPokemons().then(mostrarPokemonsOrdenados);
+    cargarTodosLosPokemons();
     botonesTipos();
 };
 
