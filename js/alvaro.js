@@ -24,6 +24,53 @@ const tiposEnIngles = {
     'Siniestro': 'dark',
     'Dragón': 'dragon'
 };
+function realizarSolicitud(pagina) {
+    document.getElementById("capa").innerHTML = "";
+    var offset = (pagina - 1) * pokemonesPorPagina;
+
+    // Decide si cargar todos los pokemones o solo los de un tipo específico
+    let url;
+    if (filtroActual) {
+        // Usa el filtro de tipo
+        url = `https://pokeapi.co/api/v2/type/${tiposEnIngles[filtroActual]}`;
+    } else {
+        // Carga general sin filtro
+        url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
+    }
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("La solicitud no fue exitosa");
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (filtroActual) {
+                // Manejo especial para cuando se filtra por tipo
+                totalPaginas = Math.ceil(data.pokemon.length / pokemonesPorPagina);
+                let pokemonPorTipo = data.pokemon.slice(offset, offset + pokemonesPorPagina).map(p => p.pokemon);
+                pokemonPorTipo.forEach(pokemon => {
+                    fetch(pokemon.url)
+                        .then(response => response.json())
+                        .then(procesarPokemon)
+                        .catch(error => manejarError(error.message));
+                });
+            } else {
+                // Manejo para la carga general sin filtro
+                totalPaginas = Math.ceil(data.count / pokemonesPorPagina);
+                data.results.forEach(pokemon => {
+                    fetch(pokemon.url)
+                        .then(response => response.json())
+                        .then(procesarPokemon)
+                        .catch(error => manejarError(error.message));
+                });
+            }
+            paginaActual = pagina;
+            actualizarPaginacion();
+        })
+        .catch(error => manejarError(error.message));
+}
 
 // Corregido para incluir el offset en la URL
 function cargarTodosLosPokemons() {
@@ -98,9 +145,9 @@ function aplicarOrdenamiento(criterio) {
 
 function filtrarPorTipo(tipo) {
     filtroActual = tipo; // Establece el filtro actual
-     // Siempre reinicia a la primera página al aplicar un nuevo filtro
-    cargarPokemonsPorTipo(); // Llama a la función de carga ajustada para el filtrado
+    realizarSolicitud(paginaActual); // Vuelve a cargar la página con el nuevo filtro
 }
+
 
 
 
@@ -181,6 +228,10 @@ window.onload = function () {
 
 function toggleDropdown() {
     document.querySelector('.dropdown-content').classList.toggle('show');
+    // Aplicar el filtro si el menú desplegable está abierto
+    if (document.querySelector('.dropdown-content').classList.contains('show')) {
+        aplicarFiltroDropdown();
+    }
 }
 
 // Cierra el menú desplegable si el usuario hace clic fuera de él
@@ -193,6 +244,18 @@ window.onclick = function (event) {
                 openDropdown.classList.remove('show');
             }
         }
+    }
+}
+function aplicarFiltroDropdown() {
+    var filtro = document.querySelector('.dropdown-content .selected').textContent;
+    // Aquí aplicas el filtro según el valor de 'filtro'
+    // Puedes usar 'filtrarPorTipo' o cualquier otra función de filtrado que tengas implementada
+}
+function cargarPagina(pagina) {
+    document.getElementById("capa").innerHTML = "";
+    realizarSolicitud(pagina);
+    if (document.querySelector('.dropdown-content').classList.contains('show')) {
+        aplicarFiltroDropdown();
     }
 }
 
@@ -227,11 +290,4 @@ document.getElementById('search-input').addEventListener('keyup', function (even
         filtrarPorNombre(false);
     }
 });
-
-
-
-
-
-
-
 

@@ -1,3 +1,4 @@
+
 var paginaActual = 1;
 var totalPaginas = 0;
 var rangoActual = 1;
@@ -19,47 +20,26 @@ function procesarPokemon(pokemon) {
 }
 
 function realizarSolicitud(pagina) {
-    document.getElementById("capa").innerHTML = "";
     var offset = (pagina - 1) * pokemonesPorPagina;
-
-    // Decide si cargar todos los pokemones o solo los de un tipo específico
-    let url;
-    if (filtroActual) {
-        // Usa el filtro de tipo
-        url = `https://pokeapi.co/api/v2/type/${tiposEnIngles[filtroActual]}`;
-    } else {
-        // Carga general sin filtro
-        url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
-    }
-
-    fetch(url)
+    fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("La solicitud no fue exitosa");
             }
             return response.json();
         })
-        .then(data => {
-            if (filtroActual) {
-                // Manejo especial para cuando se filtra por tipo
-                totalPaginas = Math.ceil(data.pokemon.length / pokemonesPorPagina);
-                let pokemonPorTipo = data.pokemon.slice(offset, offset + pokemonesPorPagina).map(p => p.pokemon);
-                pokemonPorTipo.forEach(pokemon => {
-                    fetch(pokemon.url)
-                        .then(response => response.json())
-                        .then(procesarPokemon)
-                        .catch(error => manejarError(error.message));
-                });
-            } else {
-                // Manejo para la carga general sin filtro
-                totalPaginas = Math.ceil(data.count / pokemonesPorPagina);
-                data.results.forEach(pokemon => {
-                    fetch(pokemon.url)
-                        .then(response => response.json())
-                        .then(procesarPokemon)
-                        .catch(error => manejarError(error.message));
-                });
-            }
+        .then(pokemonList => {
+            totalPaginas = Math.ceil(pokemonList.count / pokemonesPorPagina);
+
+            pokemonList.results.forEach(pokemon => {
+                fetch(pokemon.url)
+                    .then(response => response.json())
+                    .then(pokemonData => {
+                        procesarPokemon(pokemonData);
+                    })
+                    .catch(error => manejarError(error.message));
+            });
+
             paginaActual = pagina;
             actualizarPaginacion();
         })
