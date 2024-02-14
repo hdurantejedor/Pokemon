@@ -1,7 +1,7 @@
 
     // Función para mostrar detalles de un Pokémon
 
-   export function mostrarDetalles(pokemonId) {
+    function mostrarDetalles(pokemonId) {
         
         fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
             .then(response => {
@@ -18,7 +18,7 @@
                 var pokemonContainer = document.createElement('div');
                 pokemonContainer.id = 'pokemon-details';
 
-                crearBotonesNavegacion(pokemonContainer, pokemonId);
+                crearBotonesNavegacion(pokemonId);
                 
                 // Crear elementos HTML para cada detalle del Pokémon
                 var nameElement = document.createElement('h1');
