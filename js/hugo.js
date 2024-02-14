@@ -1,4 +1,3 @@
-
 var paginaActual = 1;
 var totalPaginas = 0;
 var rangoActual = 1;
@@ -45,6 +44,7 @@ function realizarSolicitud(pagina) {
         })
         .catch(error => manejarError(error.message));
 }
+
 
 function manejarError(message) {
     console.error("Ha ocurrido un problema:", message);
@@ -122,7 +122,6 @@ function actualizarPaginacion() {
     var paginaActualSpan = document.createElement("span");
     paginaActualSpan.textContent = `Página ${paginaActual}`;
     paginacionContainer.appendChild(paginaActualSpan);
+
+   
 }
-
-
-

@@ -24,6 +24,8 @@ const tiposEnIngles = {
     'Siniestro': 'dark',
     'Dragón': 'dragon'
 };
+
+// Realiza la solicitud de los pokemones y muestra en la página
 function realizarSolicitud(pagina) {
     document.getElementById("capa").innerHTML = "";
     var offset = (pagina - 1) * pokemonesPorPagina;
@@ -68,16 +70,18 @@ function realizarSolicitud(pagina) {
             }
             paginaActual = pagina;
             actualizarPaginacion();
+            // Llama a filtrarPorNombre con keepFilter establecido en true para mantener el filtro en la página actual
+            filtrarPorNombre(true);
         })
         .catch(error => manejarError(error.message));
 }
 
-// Corregido para incluir el offset en la URL
+// Carga todos los pokemones
 function cargarTodosLosPokemons() {
     var offset = (paginaActual - 1) * pokemonesPorPagina;
     var url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
 
-    fetch(url)
+    return fetch(url)
         .then(response => response.json())
         .then(data => {
             pokemonList = data.results;
@@ -92,6 +96,7 @@ function cargarTodosLosPokemons() {
         .catch(error => console.error("Error al cargar Pokémon: ", error));
 }
 
+// Muestra los pokemones ordenados
 function mostrarPokemonsOrdenados() {
     const contenedor = document.getElementById("capa");
     contenedor.innerHTML = ''; // Limpia el contenedor
@@ -113,7 +118,7 @@ function mostrarPokemonsOrdenados() {
     });
 }
 
-
+// Ordena los pokemones según el criterio especificado
 function sort(criterio) {
     if (pokemonList.length === 0) {
         cargarTodosLosPokemons().then(() => {
@@ -124,6 +129,7 @@ function sort(criterio) {
     }
 }
 
+// Aplica el ordenamiento a la lista de pokemones
 function aplicarOrdenamiento(criterio) {
     switch (criterio) {
         case 'lowerNumber':
@@ -142,55 +148,17 @@ function aplicarOrdenamiento(criterio) {
     mostrarPokemonsOrdenados(); // Actualiza la UI con la lista ordenada
 }
 
-
+// Filtra los pokemones por tipo
 function filtrarPorTipo(tipo) {
     filtroActual = tipo; // Establece el filtro actual
     realizarSolicitud(paginaActual); // Vuelve a cargar la página con el nuevo filtro
 }
 
-
-
-
-// Asumiendo que ya tienes definidas las variables iniciales y tiposEnIngles.
-
-function cargarPokemonsPorTipo() {
-    let url;
-    if (filtroActual) {
-        url = `https://pokeapi.co/api/v2/type/${tiposEnIngles[filtroActual]}`;
-    } else {
-        let offset = (paginaActual - 1) * pokemonesPorPagina;
-        url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
-    }
-
-    fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const results = filtroActual ? data.pokemon.map(item => item.pokemon) : data.results;
-            totalPaginas = Math.ceil((filtroActual ? results.length : data.count) / pokemonesPorPagina);
-            const promises = results.slice(0, pokemonesPorPagina).map(pokemon => fetch(pokemon.url).then(resp => resp.json()));
-            return Promise.all(promises);
-        })
-        .then(pokemons => {
-            pokemonList = pokemons;
-            mostrarPokemonsOrdenados();
-            actualizarPaginacion();
-        })
-        .catch(error => console.error("Error al cargar Pokémon: ", error));
-}
-
-// Revisa la implementación de mostrarPokemonsOrdenados y actualizarPaginacion para asegurar que manejen correctamente los datos y la UI.
-
-
-
-
-
-
+// Inicialización
 window.onload = function() {
     cargarTodosLosPokemons();
     botonesTipos();
 };
-
-
 
 function botonesTipos() {
     var tiposPokemon = [
@@ -202,7 +170,7 @@ function botonesTipos() {
 
     var filtroContainer = document.getElementById('filtro');
     var filaActual;
-tiposPokemon.forEach((tipo, index) => {
+    tiposPokemon.forEach((tipo, index) => {
         if (index % 9 === 0) {
             filaActual = document.createElement('div');
             filaActual.className = 'btn-group d-flex justify-content-center align-items-center';
@@ -220,52 +188,20 @@ tiposPokemon.forEach((tipo, index) => {
     });
 }
 
+// Cargar página y botones de tipos al cargar la ventana
 window.onload = function () {
     cargarPagina(paginaActual);
     botonesTipos();
 };
 
+// Variable para almacenar el valor del filtro de búsqueda
+var searchFilter = '';
 
-function toggleDropdown() {
-    document.querySelector('.dropdown-content').classList.toggle('show');
-    // Aplicar el filtro si el menú desplegable está abierto
-    if (document.querySelector('.dropdown-content').classList.contains('show')) {
-        aplicarFiltroDropdown();
-    }
-}
-
-// Cierra el menú desplegable si el usuario hace clic fuera de él
-window.onclick = function (event) {
-    if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName('dropdown-content');
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
-}
-function aplicarFiltroDropdown() {
-    var filtro = document.querySelector('.dropdown-content .selected').textContent;
-    // Aquí aplicas el filtro según el valor de 'filtro'
-    // Puedes usar 'filtrarPorTipo' o cualquier otra función de filtrado que tengas implementada
-}
-function cargarPagina(pagina) {
-    document.getElementById("capa").innerHTML = "";
-    realizarSolicitud(pagina);
-    if (document.querySelector('.dropdown-content').classList.contains('show')) {
-        aplicarFiltroDropdown();
-    }
-}
-
-// Refactor to maintain the filter when changing pages
-var currentFilter = '';
-
+// Función para filtrar por nombre
 function filtrarPorNombre(keepFilter) {
     var inputElement = document.getElementById('search-input');
-    // If keepFilter is true, use the currentFilter, otherwise get the new input value
-    var input = keepFilter ? currentFilter : inputElement.value.toLowerCase();
+    // Si keepFilter es true, utiliza el valor almacenado en searchFilter, de lo contrario, obtén el nuevo valor del campo de entrada
+    var input = keepFilter ? searchFilter : inputElement.value.toLowerCase();
     var capa = document.getElementById('capa');
     var pokemonBoxes = capa.getElementsByClassName('pokemon-box');
 
@@ -277,17 +213,64 @@ function filtrarPorNombre(keepFilter) {
             pokemonBoxes[i].style.display = "none";
         }
     }
-    // Update currentFilter with the new input value if not keeping the filter
+    // Actualiza searchFilter con el nuevo valor de entrada si no se mantiene el filtro
     if (!keepFilter) {
-        currentFilter = input;
-        inputElement.value = ''; // Clear the text field
+        searchFilter = input;
+        inputElement.value = ''; // Borra el campo de texto
     }
 }
 
-// Add keyboard event to search when pressing Enter
+// Agregar evento de teclado para buscar al presionar Enter
 document.getElementById('search-input').addEventListener('keyup', function (event) {
     if (event.key === 'Enter') {
         filtrarPorNombre(false);
     }
 });
 
+// Llamar a la función filtrarPorNombre con keepFilter establecido en true cuando cambias de página
+function cargarPagina(pagina) {
+    // Reiniciar la página actual y el rango
+    paginaActual = pagina;
+    rangoActual = Math.ceil(paginaActual / 10);
+
+    document.getElementById("capa").innerHTML = "";
+    realizarSolicitud(pagina);
+    // Llama a filtrarPorNombre con keepFilter establecido en true para mantener el filtro mientras cambias de página
+    filtrarPorNombre(true);
+}
+// Función para alternar la visualización del menú desplegable
+function toggleDropdown() {
+    var dropdownContent = document.querySelector('.dropdown-content');
+    dropdownContent.classList.toggle('show');
+
+    // Verificar si el menú desplegable está abierto
+    if (dropdownContent.classList.contains('show')) {
+
+        // Agregar eventos de clic a las opciones del menú desplegable
+        var opcionesDesplegable = dropdownContent.querySelectorAll('a');
+        opcionesDesplegable.forEach(function(opcion) {
+            opcion.addEventListener('click', function() {
+                // Eliminar la clase 'selected' de todas las opciones
+                opcionesDesplegable.forEach(function(opcion) {
+                    opcion.classList.remove('selected');
+                });
+
+                // Agregar la clase 'selected' a la opción seleccionada
+                this.classList.add('selected');
+            });
+        });
+    }
+}
+
+// Cerrar el menú desplegable si el usuario hace clic fuera de él
+window.onclick = function (event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName('dropdown-content');
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+};
