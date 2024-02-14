@@ -126,7 +126,7 @@ function realizarSolicitudConFiltro(pagina, filtro) {
                 let pokemonPorTipo = data.pokemon.map(p => p.pokemon);
                 let totalFiltrados = pokemonPorTipo.length;
                 totalPaginas = Math.ceil(totalFiltrados / pokemonesPorPagina);
-                
+
                 // Ajusta la página actual si es necesario
                 if (paginaActual > totalPaginas) {
                     paginaActual = totalPaginas;
@@ -155,7 +155,7 @@ function realizarSolicitudConFiltro(pagina, filtro) {
 
 
 
-window.onload = function() {
+window.onload = function () {
     cargarTodosLosPokemons().then(mostrarPokemonsOrdenados);
     botonesTipos();
 };
@@ -172,7 +172,7 @@ function botonesTipos() {
 
     var filtroContainer = document.getElementById('filtro');
     var filaActual;
-tiposPokemon.forEach((tipo, index) => {
+    tiposPokemon.forEach((tipo, index) => {
         if (index % 9 === 0) {
             filaActual = document.createElement('div');
             filaActual.className = 'btn-group d-flex justify-content-center align-items-center';
@@ -214,6 +214,38 @@ window.onclick = function (event) {
 }
 
 
+
+// Refactor to maintain the filter when changing pages
+var currentFilter = '';
+
+function filtrarPorNombre(keepFilter) {
+    var inputElement = document.getElementById('search-input');
+    // If keepFilter is true, use the currentFilter, otherwise get the new input value
+    var input = keepFilter ? currentFilter : inputElement.value.toLowerCase();
+    var capa = document.getElementById('capa');
+    var pokemonBoxes = capa.getElementsByClassName('pokemon-box');
+
+    for (var i = 0; i < pokemonBoxes.length; i++) {
+        var nombrePokemon = pokemonBoxes[i].getElementsByTagName('p')[0].textContent.toLowerCase();
+        if (nombrePokemon.includes(input)) {
+            pokemonBoxes[i].style.display = "";
+        } else {
+            pokemonBoxes[i].style.display = "none";
+        }
+    }
+    // Update currentFilter with the new input value if not keeping the filter
+    if (!keepFilter) {
+        currentFilter = input;
+        inputElement.value = ''; // Clear the text field
+    }
+}
+
+// Add keyboard event to search when pressing Enter
+document.getElementById('search-input').addEventListener('keyup', function (event) {
+    if (event.key === 'Enter') {
+        filtrarPorNombre(false);
+    }
+});
 
 
 
