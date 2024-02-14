@@ -196,6 +196,37 @@ window.onclick = function (event) {
     }
 }
 
+// Refactor to maintain the filter when changing pages
+var currentFilter = '';
+
+function filtrarPorNombre(keepFilter) {
+    var inputElement = document.getElementById('search-input');
+    // If keepFilter is true, use the currentFilter, otherwise get the new input value
+    var input = keepFilter ? currentFilter : inputElement.value.toLowerCase();
+    var capa = document.getElementById('capa');
+    var pokemonBoxes = capa.getElementsByClassName('pokemon-box');
+
+    for (var i = 0; i < pokemonBoxes.length; i++) {
+        var nombrePokemon = pokemonBoxes[i].getElementsByTagName('p')[0].textContent.toLowerCase();
+        if (nombrePokemon.includes(input)) {
+            pokemonBoxes[i].style.display = "";
+        } else {
+            pokemonBoxes[i].style.display = "none";
+        }
+    }
+    // Update currentFilter with the new input value if not keeping the filter
+    if (!keepFilter) {
+        currentFilter = input;
+        inputElement.value = ''; // Clear the text field
+    }
+}
+
+// Add keyboard event to search when pressing Enter
+document.getElementById('search-input').addEventListener('keyup', function (event) {
+    if (event.key === 'Enter') {
+        filtrarPorNombre(false);
+    }
+});
 
 
 
