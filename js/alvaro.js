@@ -141,11 +141,12 @@ function buscarPokemonPorNombre(nombre) {
     });
 }
 
-
 function filtrarPorTipo(tipo) {
     filtroActual = tipo;
     paginaActual = 1; 
     realizarSolicitud(paginaActual); 
+    searchFilter = ''; // Eliminar el filtro de nombre
+    document.getElementById('search-input').value = ''; // Limpiar el campo de búsqueda
 }
 
 // Inicialización
@@ -156,31 +157,36 @@ window.onload = function() {
 
 function botonesTipos() {
     var tiposPokemon = [
-        'Fuego', 'Agua', 'Planta', 'Bicho', 'Volador',
+        'Todos', 'Fuego', 'Agua', 'Planta', 'Bicho', 'Volador',
         'Normal', 'Veneno', 'Tierra', 'Hada', 'Eléctrico',
         'Lucha', 'Hielo', 'Fantasma', 'Acero', 'Roca',
         'Psíquico', 'Siniestro', 'Dragón'
     ];
 
     var filtroContainer = document.getElementById('filtro');
-    var filaActual;
     tiposPokemon.forEach((tipo, index) => {
-        if (index % 9 === 0) {
-            filaActual = document.createElement('div');
+        if (index % 9 === 0 || index === 0) { // Asegura que "Todos" tenga su propio espacio si es necesario
+            var filaActual = document.createElement('div');
             filaActual.className = 'btn-group d-flex justify-content-center align-items-center';
             filtroContainer.appendChild(filaActual);
         }
 
         var button = document.createElement('button');
         button.textContent = tipo;
-        button.className = 'btn btn-primary tipo-' + tipo.toLowerCase();
-        button.addEventListener('click', function () {
-            filtrarPorTipo(tipo);
-        });
+        button.className = `btn btn-primary ${tipo === 'Todos' ? 'tipo-todos' : 'tipo-' + tipo.toLowerCase()}`;
+        button.onclick = function () {
+            if (tipo === 'Todos') {
+                filtroActual = null; // Resetea el filtro actual
+                cargarPagina(1); // Carga la página inicial
+            } else {
+                filtrarPorTipo(tipo);
+            }
+        };
 
-        filaActual.appendChild(button);
+        filtroContainer.appendChild(button);
     });
 }
+
 
 // Cargar página y botones de tipos al cargar la ventana
 window.onload = function () {
