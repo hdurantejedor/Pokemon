@@ -142,14 +142,6 @@ function buscarPokemonPorNombre(nombre) {
 }
 
 
-
-
-
-
-
-
-
-
 function filtrarPorTipo(tipo) {
     filtroActual = tipo;
     paginaActual = 1; 
@@ -200,20 +192,6 @@ window.onload = function () {
 // Variable para almacenar el valor del filtro de búsqueda
 var searchFilter = '';
 
-function buscarPokemonPorNombre(nombre) {
-    const resultadosBusqueda = todosLosPokemons.filter(pokemon => pokemon.name.includes(nombre.toLowerCase()));
-    
-    // Limpia el contenedor antes de mostrar los resultados
-    const contenedor = document.getElementById("capa");
-    contenedor.innerHTML = '';
-
-    resultadosBusqueda.forEach(pokemon => {
-        fetch(pokemon.url)
-            .then(response => response.json())
-            .then(procesarPokemon)
-            .catch(error => manejarError(error.message));
-    });
-}
 
 function filtrarPorNombre() {
     var inputElement = document.getElementById('search-input');
