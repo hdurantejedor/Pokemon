@@ -18,33 +18,32 @@ function procesarPokemon(pokemon) {
     document.getElementById("capa").appendChild(contenedorPokemon);
 }
 
-function realizarSolicitud(pagina) {
-    var offset = (pagina - 1) * pokemonesPorPagina;
-    fetch(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("La solicitud no fue exitosa");
-            }
-            return response.json();
-        })
-        .then(pokemonList => {
-            totalPaginas = Math.ceil(pokemonList.count / pokemonesPorPagina);
+async function displayPokemonList(page) {
+    const url = `https://pokeapi.co/api/v2/pokemon?offset=${(page - 1) * 20}&limit=20`;
+    const cachedData = localStorage.getItem(url); // Obtener datos del almacenamiento local
+    let data;
 
-            pokemonList.results.forEach(pokemon => {
-                fetch(pokemon.url)
-                    .then(response => response.json())
-                    .then(pokemonData => {
-                        procesarPokemon(pokemonData);
-                    })
-                    .catch(error => manejarError(error.message));
-            });
+    if (cachedData) {
+        data = JSON.parse(cachedData);
+    } else {
+        data = await fetchPokemon(url);
+        saveData(url, data); // Guardar datos obtenidos en localStorage
+    }
 
-            paginaActual = pagina;
-            actualizarPaginacion();
-        })
-        .catch(error => manejarError(error.message));
+    totalPages = Math.ceil(data.count / 20);
+
+    pokemonListElement.innerHTML = '';
+
+    data.results.forEach(async (pokemon) => {
+        const pokemonData = await fetchPokemon(pokemon.url);
+        const pokemonCard = createPokemonCard(pokemonData);
+        pokemonListElement.appendChild(pokemonCard);
+    });
 }
 
+function saveData(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
 
 function manejarError(message) {
     console.error("Ha ocurrido un problema:", message);
