@@ -78,23 +78,41 @@ function realizarSolicitud(pagina) {
 
 // Carga todos los pokemones
 function cargarTodosLosPokemons() {
-    var offset = (paginaActual - 1) * pokemonesPorPagina;
-    var url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
-
-    return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            pokemonList = data.results;
-            totalPaginas = Math.ceil(data.count / pokemonesPorPagina);
-            return Promise.all(pokemonList.map(pokemon => fetch(pokemon.url).then(resp => resp.json())));
-        })
-        .then(pokemons => {
-            pokemonList = pokemons;
-            mostrarPokemonsOrdenados();
-            actualizarPaginacion();
-        })
-        .catch(error => console.error("Error al cargar Pokémon: ", error));
+    return new Promise((resolve, reject) => {
+        const pokemonsLocal = obtenerPokemonsLocalmente();
+        if (pokemonsLocal) {
+            pokemonList = pokemonsLocal;
+            totalPaginas = Math.ceil(pokemonList.length / pokemonesPorPagina);
+            resolve(pokemonList); // Resuelve la promesa con los datos locales
+        } else {
+            var offset = (paginaActual - 1) * pokemonesPorPagina;
+            var url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${pokemonesPorPagina}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    totalPaginas = Math.ceil(data.count / pokemonesPorPagina);
+                    return Promise.all(data.results.map(pokemon => fetch(pokemon.url).then(resp => resp.json())));
+                })
+                .then(pokemons => {
+                    pokemonList = pokemons;
+                    almacenarPokemonsLocalmente(pokemonList);
+                    resolve(pokemonList); // Resuelve la promesa con los datos de la API
+                })
+                .catch(error => reject(error)); // Rechaza la promesa si hay un error
+        }
+    });
 }
+
+function almacenarPokemonsLocalmente(pokemons) {
+    localStorage.setItem('pokemonList', JSON.stringify(pokemons));
+}
+
+function obtenerPokemonsLocalmente() {
+    const pokemons = localStorage.getItem('pokemonList');
+    return pokemons ? JSON.parse(pokemons) : null;
+}
+
 
 // Muestra los pokemones ordenados
 function mostrarPokemonsOrdenados() {
@@ -150,7 +168,8 @@ function aplicarOrdenamiento(criterio) {
 
 // Filtra los pokemones por tipo
 function filtrarPorTipo(tipo) {
-    filtroActual = tipo; // Establece el filtro actual
+    filtroActual = tipo;
+    paginaActual = 1; // Establece el filtro actual
     realizarSolicitud(paginaActual); // Vuelve a cargar la página con el nuevo filtro
 }
 
