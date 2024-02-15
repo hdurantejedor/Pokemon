@@ -70,7 +70,7 @@ function realizarSolicitud(pagina) {
             }
             paginaActual = pagina;
             actualizarPaginacion();
-            // Llama a filtrarPorNombre con keepFilter establecido en true para mantener el filtro en la página actual
+            
             filtrarPorNombre(true);
         })
         .catch(error => manejarError(error.message));
@@ -97,9 +97,9 @@ function cargarTodosLosPokemons() {
                 .then(pokemons => {
                     pokemonList = pokemons;
                     almacenarPokemonsLocalmente(pokemonList);
-                    resolve(pokemonList); // Resuelve la promesa con los datos de la API
+                    resolve(pokemonList); 
                 })
-                .catch(error => reject(error)); // Rechaza la promesa si hay un error
+                .catch(error => reject(error)); 
         }
     });
 }
@@ -114,63 +114,19 @@ function obtenerPokemonsLocalmente() {
 }
 
 
-// Muestra los pokemones ordenados
-function mostrarPokemonsOrdenados() {
-    const contenedor = document.getElementById("capa");
-    contenedor.innerHTML = ''; // Limpia el contenedor
 
-    // Calcula el inicio y el fin de los Pokémon para la página actual
-    const inicio = (paginaActual - 1) * pokemonesPorPagina;
-    const fin = inicio + pokemonesPorPagina;
-    const pokemonsPagina = pokemonList.slice(inicio, fin);
 
-    // Muestra solo los Pokémon de la página actual
-    pokemonsPagina.forEach(pokemon => {
-        const contenedorPokemon = document.createElement("div");
-        contenedorPokemon.className = "pokemon-box";
-        contenedorPokemon.innerHTML = `
-            <p><span style="cursor: pointer; text-decoration: underline;">${pokemon.name} (#${pokemon.id})</span></p>
-            <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
-        `;
-        contenedor.appendChild(contenedorPokemon);
-    });
-}
 
-// Ordena los pokemones según el criterio especificado
-function sort(criterio) {
-    if (pokemonList.length === 0) {
-        cargarTodosLosPokemons().then(() => {
-            aplicarOrdenamiento(criterio);
-        });
-    } else {
-        aplicarOrdenamiento(criterio);
-    }
-}
 
-// Aplica el ordenamiento a la lista de pokemones
-function aplicarOrdenamiento(criterio) {
-    switch (criterio) {
-        case 'lowerNumber':
-            pokemonList.sort((a, b) => a.id - b.id);
-            break;
-        case 'higherNumber':
-            pokemonList.sort((a, b) => b.id - a.id);
-            break;
-        case 'aToZ':
-            pokemonList.sort((a, b) => a.name.localeCompare(b.name));
-            break;
-        case 'zToA':
-            pokemonList.sort((a, b) => b.name.localeCompare(a.name));
-            break;
-    }
-    mostrarPokemonsOrdenados(); // Actualiza la UI con la lista ordenada
-}
 
-// Filtra los pokemones por tipo
+
+
+
+
 function filtrarPorTipo(tipo) {
     filtroActual = tipo;
-    paginaActual = 1; // Establece el filtro actual
-    realizarSolicitud(paginaActual); // Vuelve a cargar la página con el nuevo filtro
+    paginaActual = 1; 
+    realizarSolicitud(paginaActual); 
 }
 
 // Inicialización
