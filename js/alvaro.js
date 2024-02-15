@@ -3,6 +3,8 @@ var totalPaginas = 0;
 var pokemonesPorPagina = 20;
 var filtroActual = null;
 var pokemonList = [];
+var todosLosPokemons = [];
+
 
 const tiposEnIngles = {
     'Fuego': 'fire',
@@ -76,7 +78,14 @@ function realizarSolicitud(pagina) {
         .catch(error => manejarError(error.message));
 }
 
-// Carga todos los pokemones
+function cargarNombresPokemons() {
+    fetch(`https://pokeapi.co/api/v2/pokemon?limit=10000`) // Límite alto para asegurar que se carguen todos
+        .then(response => response.json())
+        .then(data => {
+            todosLosPokemons = data.results; // Guarda solo los nombres y URLs
+        })
+        .catch(error => console.error("Error cargando todos los Pokémon:", error));
+}
 function cargarTodosLosPokemons() {
     return new Promise((resolve, reject) => {
         const pokemonsLocal = obtenerPokemonsLocalmente();
@@ -113,6 +122,24 @@ function obtenerPokemonsLocalmente() {
     return pokemons ? JSON.parse(pokemons) : null;
 }
 
+function buscarPokemonPorNombre(nombre) {
+    if (!nombre.trim()) return; // Evita búsquedas vacías
+
+    const resultadosBusqueda = todosLosPokemons.filter(pokemon => pokemon.name.includes(nombre.toLowerCase()));
+
+    const contenedor = document.getElementById("capa");
+    contenedor.innerHTML = ''; // Limpia el contenedor antes de mostrar los resultados
+
+    resultadosBusqueda.forEach(pokemon => {
+        fetch(pokemon.url)
+            .then(response => response.json())
+            .then(detallesPokemon => {
+                // Aquí asumimos que tienes una función `procesarPokemon` que maneja la creación de elementos HTML para mostrar los detalles del Pokémon
+                procesarPokemon(detallesPokemon);
+            })
+            .catch(error => console.error("Error al cargar detalles del Pokémon:", error));
+    });
+}
 
 
 
@@ -167,32 +194,31 @@ function botonesTipos() {
 window.onload = function () {
     cargarPagina(paginaActual);
     botonesTipos();
+    cargarNombresPokemons();
 };
 
 // Variable para almacenar el valor del filtro de búsqueda
 var searchFilter = '';
 
-// Función para filtrar por nombre
-function filtrarPorNombre(keepFilter) {
-    var inputElement = document.getElementById('search-input');
-    // Si keepFilter es true, utiliza el valor almacenado en searchFilter, de lo contrario, obtén el nuevo valor del campo de entrada
-    var input = keepFilter ? searchFilter : inputElement.value.toLowerCase();
-    var capa = document.getElementById('capa');
-    var pokemonBoxes = capa.getElementsByClassName('pokemon-box');
+function buscarPokemonPorNombre(nombre) {
+    const resultadosBusqueda = todosLosPokemons.filter(pokemon => pokemon.name.includes(nombre.toLowerCase()));
+    
+    // Limpia el contenedor antes de mostrar los resultados
+    const contenedor = document.getElementById("capa");
+    contenedor.innerHTML = '';
 
-    for (var i = 0; i < pokemonBoxes.length; i++) {
-        var nombrePokemon = pokemonBoxes[i].getElementsByTagName('p')[0].textContent.toLowerCase();
-        if (nombrePokemon.includes(input)) {
-            pokemonBoxes[i].style.display = "";
-        } else {
-            pokemonBoxes[i].style.display = "none";
-        }
-    }
-    // Actualiza searchFilter con el nuevo valor de entrada si no se mantiene el filtro
-    if (!keepFilter) {
-        searchFilter = input;
-        inputElement.value = ''; // Borra el campo de texto
-    }
+    resultadosBusqueda.forEach(pokemon => {
+        fetch(pokemon.url)
+            .then(response => response.json())
+            .then(procesarPokemon)
+            .catch(error => manejarError(error.message));
+    });
+}
+
+function filtrarPorNombre() {
+    var inputElement = document.getElementById('search-input');
+    var nombre = inputElement.value;
+    buscarPokemonPorNombre(nombre);
 }
 
 // Agregar evento de teclado para buscar al presionar Enter
