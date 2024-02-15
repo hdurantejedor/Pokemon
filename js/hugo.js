@@ -3,6 +3,63 @@ var totalPaginas = 0;
 var rangoActual = 1;
 var pokemonesPorPagina = 20;
 
+const pokemonListElement = document.getElementById('pokemonList');
+const searchInput = document.getElementById('searchInput');
+let currentPage = 1;
+let totalPages = 1;
+let currentPokemon;
+
+// Function to fetch Pokemon data
+async function fetchPokemon(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching Pokemon:', error);
+    }
+}
+
+// Function to save data to localStorage
+function saveData(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Function to retrieve data from localStorage
+function getData(key) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : null;
+}
+
+// Function to display Pokemon list
+async function displayPokemonList(page) {
+    const url = `https://pokeapi.co/api/v2/pokemon?offset=${(page - 1) * 20}&limit=20`;
+    const cachedData = getData(url); // Attempt to get data from localStorage
+    let data;
+
+    if (cachedData) {
+        data = cachedData;
+    } else {
+        data = await fetchPokemon(url);
+        saveData(url, data); // Save fetched data to localStorage
+    }
+
+    totalPages = Math.ceil(data.count / 20);
+
+    pokemonListElement.innerHTML = '';
+
+    data.results.forEach(async (pokemon) => {
+        const pokemonData = await fetchPokemon(pokemon.url);
+        const pokemonElement = document.createElement('div');
+        pokemonElement.textContent = pokemonData.name; // Placeholder, you can replace it with desired Pokemon data
+        pokemonListElement.appendChild(pokemonElement);
+    });
+}
+
+// Initial display
+displayPokemonList(currentPage);
+
+
 function procesarPokemon(pokemon) {
     var nombre = pokemon.name;
     var imagen = pokemon.sprites.front_default;
@@ -20,14 +77,14 @@ function procesarPokemon(pokemon) {
 
 async function displayPokemonList(page) {
     const url = `https://pokeapi.co/api/v2/pokemon?offset=${(page - 1) * 20}&limit=20`;
-    const cachedData = localStorage.getItem(url); // Obtener datos del almacenamiento local
+    const cachedData = getData(url); // Attempt to get data from localStorage
     let data;
 
     if (cachedData) {
-        data = JSON.parse(cachedData);
+        data = cachedData;
     } else {
         data = await fetchPokemon(url);
-        saveData(url, data); // Guardar datos obtenidos en localStorage
+        saveData(url, data); // Save fetched data to localStorage
     }
 
     totalPages = Math.ceil(data.count / 20);
@@ -36,8 +93,9 @@ async function displayPokemonList(page) {
 
     data.results.forEach(async (pokemon) => {
         const pokemonData = await fetchPokemon(pokemon.url);
-        const pokemonCard = createPokemonCard(pokemonData);
-        pokemonListElement.appendChild(pokemonCard);
+        const pokemonElement = document.createElement('div');
+        pokemonElement.textContent = pokemonData.name; // Placeholder, you can replace it with desired Pokemon data
+        pokemonListElement.appendChild(pokemonElement);
     });
 }
 

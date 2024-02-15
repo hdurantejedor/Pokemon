@@ -159,7 +159,6 @@ function filtrarPorTipo(tipo) {
     searchFilter = ''; // Eliminar el filtro de nombre
     document.getElementById('search-input').value = ''; // Limpiar el campo de búsqueda
 }
-
 // Inicialización
 window.onload = function() {
     cargarTodosLosPokemons();
