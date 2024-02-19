@@ -75,34 +75,6 @@ function procesarPokemon(pokemon) {
     document.getElementById("capa").appendChild(contenedorPokemon);
 }
 
-async function displayPokemonList(page) {
-    const url = `https://pokeapi.co/api/v2/pokemon?offset=${(page - 1) * 20}&limit=20`;
-    const cachedData = getData(url); // Attempt to get data from localStorage
-    let data;
-
-    if (cachedData) {
-        data = cachedData;
-    } else {
-        data = await fetchPokemon(url);
-        saveData(url, data); // Save fetched data to localStorage
-    }
-
-    totalPages = Math.ceil(data.count / 20);
-
-    pokemonListElement.innerHTML = '';
-
-    data.results.forEach(async (pokemon) => {
-        const pokemonData = await fetchPokemon(pokemon.url);
-        const pokemonElement = document.createElement('div');
-        pokemonElement.textContent = pokemonData.name; // Placeholder, you can replace it with desired Pokemon data
-        pokemonListElement.appendChild(pokemonElement);
-    });
-}
-
-function saveData(key, data) {
-    localStorage.setItem(key, JSON.stringify(data));
-}
-
 function manejarError(message) {
     console.error("Ha ocurrido un problema:", message);
 }

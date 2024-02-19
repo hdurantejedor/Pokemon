@@ -113,14 +113,14 @@ function cargarTodosLosPokemons() {
     });
 }
 
-function almacenarPokemonsLocalmente(pokemons) {
-    localStorage.setItem('pokemonList', JSON.stringify(pokemons));
-}
+// function almacenarPokemonsLocalmente(pokemons) {
+//     localStorage.setItem('pokemonList', JSON.stringify(pokemons));
+// }
 
-function obtenerPokemonsLocalmente() {
-    const pokemons = localStorage.getItem('pokemonList');
-    return pokemons ? JSON.parse(pokemons) : null;
-}
+// function obtenerPokemonsLocalmente() {
+//     const pokemons = localStorage.getItem('pokemonList');
+//     return pokemons ? JSON.parse(pokemons) : null;
+// }
 
 function buscarPokemonPorNombre(nombre) {
     if (!nombre.trim()) return; // Evita búsquedas vacías
@@ -229,39 +229,4 @@ function cargarPagina(pagina) {
     // Llama a filtrarPorNombre con keepFilter establecido en true para mantener el filtro mientras cambias de página
     filtrarPorNombre(true);
 }
-// Función para alternar la visualización del menú desplegable
-function toggleDropdown() {
-    var dropdownContent = document.querySelector('.dropdown-content');
-    dropdownContent.classList.toggle('show');
 
-    // Verificar si el menú desplegable está abierto
-    if (dropdownContent.classList.contains('show')) {
-
-        // Agregar eventos de clic a las opciones del menú desplegable
-        var opcionesDesplegable = dropdownContent.querySelectorAll('a');
-        opcionesDesplegable.forEach(function(opcion) {
-            opcion.addEventListener('click', function() {
-                // Eliminar la clase 'selected' de todas las opciones
-                opcionesDesplegable.forEach(function(opcion) {
-                    opcion.classList.remove('selected');
-                });
-
-                // Agregar la clase 'selected' a la opción seleccionada
-                this.classList.add('selected');
-            });
-        });
-    }
-}
-
-// Cerrar el menú desplegable si el usuario hace clic fuera de él
-window.onclick = function (event) {
-    if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName('dropdown-content');
-        for (var i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
-};
