@@ -113,15 +113,6 @@ function cargarTodosLosPokemons() {
     });
 }
 
-// function almacenarPokemonsLocalmente(pokemons) {
-//     localStorage.setItem('pokemonList', JSON.stringify(pokemons));
-// }
-
-// function obtenerPokemonsLocalmente() {
-//     const pokemons = localStorage.getItem('pokemonList');
-//     return pokemons ? JSON.parse(pokemons) : null;
-// }
-
 function buscarPokemonPorNombre(nombre) {
     if (!nombre.trim()) return; // Evita búsquedas vacías
 
